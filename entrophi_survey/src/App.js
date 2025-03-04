@@ -1,23 +1,14 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Mysurvey from './Components/SurveyDisplay/SurveyOne';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="sik kafalı arman" />
-        <p>
-          sik kafalı japon askeri arman
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <main>
+        <h1>Entrophi Survey</h1>
+        <Mysurvey />
+      </main>
     </div>
   );
 }

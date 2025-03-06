@@ -1,4 +1,9 @@
 const json = {
+  "title": "User Registration",
+  "description": "Please enter your information to register.",
+  "logo": "entrophico_logo.jpg",
+  "logoWidth": 60,
+  "logoHeight": 60,
   questions: [
     {
       "name": "username",

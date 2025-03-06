@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'; 
-import Mysurvey from '../SurveyTypes/SurveyTypeOne';
+import Mysurvey from '../SurveyTypes/SurveyTypeTwo';
 
 const SurveyOne = () => {
     const [showPage, setShowPage] = useState(true);
@@ -12,7 +12,7 @@ const SurveyOne = () => {
     const setFinalPage = () => {
         return (
             <main>
-                <h1>Thank you for completing the survey!</h1>
+                <h1>Thank you for completing the survey 2!</h1>
                 <p>Click here to return to the home page</p>
             </main>
         );

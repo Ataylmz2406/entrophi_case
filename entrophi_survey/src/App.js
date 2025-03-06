@@ -1,14 +1,11 @@
 import React from 'react';
 import './App.css';
-import Mysurvey from './Components/SurveyDisplay/SurveyOne';
+import Mysurvey from './Components/SurveyDisplay/SurveyTwo';
 
 function App() {
   return (
     <div className="App">
-      <main>
-        <h1>Entrophi Survey</h1>
-        <Mysurvey />
-      </main>
+    <Mysurvey />
     </div>
   );
 }

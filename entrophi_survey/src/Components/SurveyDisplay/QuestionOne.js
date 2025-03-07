@@ -8,6 +8,7 @@ const json = {
     {
       "name": "page1",
       "title": "Your information",
+      "description": "Page 1 of 4",
       "elements": [
         {
           "type": "text",
@@ -40,7 +41,8 @@ const json = {
     },
     {
       "name": "page2",
-      "title": "sleep",
+      "title": "Sleep",
+      "description": "Page 2 of 4",
       "elements": [
         {
           "type": "rating",
@@ -61,19 +63,20 @@ const json = {
     },
     {
       "name": "page3",
-      "title": "excersize",
+      "title": "Exercise",
+      "description": "Page 3 of 4",
       "elements": [
         {
           "type": "boolean",
           "name": "question7",
-          "title": "Do you excersize",
+          "title": "Do you exercise",
           "isRequired": true
         },
         {
           "type": "tagbox",
           "name": "question8",
           "visibleIf": "{question7} = true",
-          "title": "What type of excersize",
+          "title": "What type of exercise",
           "choices": [
             {
               "value": "Item 1",
@@ -105,6 +108,8 @@ const json = {
     },
     {
       "name": "page4",
+      "title": "Nutrition",
+      "description": "Page 4 of 4",
       "elements": [
         {
           "type": "boolean",
@@ -122,9 +127,10 @@ const json = {
       ]
     }
   ],
-  "showQuestionNumbers": "off",
+  "showQuestionNumbers": "on",
   "questionErrorLocation": "bottom",
-  "showProgressBar": "top"
+  "showProgressBar": "top",
+  "progressBarType": "pages"
 }
 
 export default json;

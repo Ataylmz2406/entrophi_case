@@ -3,44 +3,59 @@ import * as Survey from 'survey-react';
 import 'survey-react/survey.css';
 import jsPDF from 'jspdf';
 import Chart from 'chart.js/auto';
-import json from './QuestionOne.js'; // Adjust the path as needed
+import json from './QuestionOne.js';
 
 const MysurveyWithPDF = (props) => {
-  const [surveyData, setSurveyData] = useState(props.initialData || null);
+  // This state will hold data when the survey is completed or when we're in summary mode
+  const [completedData, setCompletedData] = useState(props.initialData);
+  
   const sleepChartRef = useRef(null);
   const exerciseChartRef = useRef(null);
   const sleepChartInstanceRef = useRef(null);
   const exerciseChartInstanceRef = useRef(null);
 
-  // Configure Survey.js settings for progress indicators
+  // Apply the default theme.
   Survey.StylesManager.applyTheme("default");
   const surveyModel = new Survey.Model(json);
   
-  // Add page numbers and question counts
+  // Override some settings.
   surveyModel.showProgressBar = "top";
   surveyModel.progressBarType = "pages";
   surveyModel.showCompletedPage = props.showCompletedPage !== undefined ? props.showCompletedPage : false;
-  
-  // Display page X of Y
   surveyModel.questionTitleTemplate = "{title} ({require}) {num} of {total}";
   surveyModel.pageNumberTemplate = "Page {current} of {total}";
   
-  // Load initial data if provided
+  // If partial data is provided (from saved progress), load it into the survey model.
   useEffect(() => {
     if (props.initialData) {
-      setSurveyData(props.initialData);
+      surveyModel.data = props.initialData;
+      
+      // If we're in summary mode, make sure completedData is set
+      if (props.onlyShowSummary) {
+        setCompletedData(props.initialData);
+      }
     }
-  }, [props.initialData]);
+  }, [props.initialData, props.onlyShowSummary, surveyModel]);
 
-  // Called when survey is complete
-  const onComplete = (survey) => {
-    setSurveyData(survey.data);
-    if (props.onComplete) {
-      props.onComplete(survey.data);
+  // Auto-save progress on every value change.
+  surveyModel.onValueChanged.add((sender, options) => {
+    if (!props.onlyShowSummary) { // Only save if we're not in summary mode
+      localStorage.setItem("surveyData", JSON.stringify(sender.data));
     }
+  });
+
+  // When the survey is complete, update completedData.
+  const onComplete = (survey) => {
+    const surveyData = survey.data;
+    setCompletedData(surveyData);
+    if (props.onComplete) {
+      props.onComplete(surveyData);
+    }
+    // Clear saved data since survey is now complete
+    localStorage.removeItem("surveyData");
   };
 
-  // Helper function to convert exercise code to readable name
+  // Helper function to convert exercise code to readable name.
   const getExerciseName = (code) => {
     const exerciseMap = {
       "Item 1": "Fitness",
@@ -52,7 +67,7 @@ const MysurveyWithPDF = (props) => {
     return exerciseMap[code] || code;
   };
 
-  // Process exercise data for pie chart
+  // Process exercise data for the pie chart.
   const getExerciseData = (data) => {
     if (!data || !data.question8) return { labels: [], values: [] };
     
@@ -71,11 +86,11 @@ const MysurveyWithPDF = (props) => {
     };
   };
 
-  // Render charts when surveyData is available
+  // Render charts when the survey is completed (using completedData).
   useEffect(() => {
-    if (!surveyData) return;
+    if (!completedData) return;
 
-    // Sleep chart
+    // Sleep chart.
     if (sleepChartRef.current) {
       if (sleepChartInstanceRef.current) {
         sleepChartInstanceRef.current.destroy();
@@ -87,11 +102,10 @@ const MysurveyWithPDF = (props) => {
           datasets: [
             {
               label: 'Sleep Data',
-              data: [surveyData.question5, surveyData.question6],
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(153, 102, 255, 0.6)',
-              ],
+              data: [completedData.question5, completedData.question6],
+              backgroundColor: ['#003366', '#003366'],
+              borderColor: '#003366',
+              borderWidth: 1,
             },
           ],
         },
@@ -99,12 +113,12 @@ const MysurveyWithPDF = (props) => {
       });
     }
 
-    // Exercise pie chart
-    if (exerciseChartRef.current && surveyData.question7 && surveyData.question8) {
+    // Exercise pie chart.
+    if (exerciseChartRef.current && completedData.question7 && completedData.question8) {
       if (exerciseChartInstanceRef.current) {
         exerciseChartInstanceRef.current.destroy();
       }
-      const exerciseData = getExerciseData(surveyData);
+      const exerciseData = getExerciseData(completedData);
       exerciseChartInstanceRef.current = new Chart(exerciseChartRef.current, {
         type: 'pie',
         data: {
@@ -113,14 +127,10 @@ const MysurveyWithPDF = (props) => {
             {
               label: 'Exercise Types',
               data: exerciseData.values,
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(54, 162, 235, 0.6)',
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(153, 102, 255, 0.6)',
-                'rgba(255, 159, 64, 0.6)',
-              ],
+              backgroundColor: exerciseData.labels.map((_, index) => 
+                index % 2 === 0 ? '#003366' : '#FFFFFF'
+              ),
+              borderColor: '#003366',
               borderWidth: 1,
             },
           ],
@@ -128,9 +138,9 @@ const MysurveyWithPDF = (props) => {
         options: { responsive: true, maintainAspectRatio: false },
       });
     }
-  }, [surveyData]);
+  }, [completedData]);
 
-  // Function to generate the PDF report
+  // Function to generate the PDF report.
   const generatePDF = (data) => {
     const doc = new jsPDF();
     doc.setFontSize(18);
@@ -189,7 +199,7 @@ const MysurveyWithPDF = (props) => {
     doc.save('survey_report.pdf');
   };
 
-  // Generate survey summary text
+  // Generate survey summary text (for completed surveys only).
   const getSurveySummary = (data) => {
     if (!data) return [];
     
@@ -223,39 +233,29 @@ const MysurveyWithPDF = (props) => {
     return summary;
   };
 
-  // Render the summary section only
+  // Render the summary view (only when the survey is complete).
   const renderSummaryOnly = () => {
+    if (!completedData) {
+      console.error("Summary view requested but no completed data available");
+      return <div>No survey data available</div>;
+    }
+    
     return (
       <div className="survey-summary">
         <h2>Survey Summary</h2>
-        {/* Flex container for buttons aligned to the left */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '10px', paddingTop: '10px' }}>
           <button 
-            onClick={() => generatePDF(surveyData)} 
-            style={{ 
-              padding: '10px 20px', 
-              backgroundColor: '#4CAF50', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: '4px', 
-              cursor: 'pointer',
-              fontSize: '16px'
-            }}
+            onClick={() => generatePDF(completedData)} 
+            className="download-pdf-btn"
+            style={{ padding: '10px 15px', backgroundColor: '#003366', color: 'white', border: 'none', borderRadius: '4px' }}
           >
             Download PDF Report
           </button>
           {props.showFinishButton && (
             <button 
               onClick={props.onFinish}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#2196F3',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '16px'
-              }}
+              className="finish-btn"
+              style={{ padding: '10px 15px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px' }}
             >
               Finish
             </button>
@@ -264,20 +264,20 @@ const MysurveyWithPDF = (props) => {
         <div className="summary-section">
           <h3>Your Responses</h3>
           <ul>
-            {getSurveySummary(surveyData).map((item, index) => (
+            {getSurveySummary(completedData).map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
         </div>
         
         <div className="charts-container" style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-          {surveyData.question5 && (
+          {completedData.question5 && (
             <div style={{ position: 'relative', height: '250px', width: '400px', margin: '10px' }}>
               <h3>Sleep Data</h3>
               <canvas ref={sleepChartRef} id="sleepChartCanvas" />
             </div>
           )}
-          {surveyData.question7 && surveyData.question8 && (
+          {completedData.question7 && completedData.question8 && (
             <div style={{ position: 'relative', height: '250px', width: '400px', margin: '10px' }}>
               <h3>Exercise Types</h3>
               <canvas ref={exerciseChartRef} id="exerciseChartCanvas" />
@@ -288,75 +288,15 @@ const MysurveyWithPDF = (props) => {
     );
   };
 
+  // If we're in summary mode (props.onlyShowSummary), render only the summary.
+  if (props.onlyShowSummary) {
+    return renderSummaryOnly();
+  }
+
+  // Otherwise, render the survey interface.
   return (
     <div>
-      {props.onlyShowSummary ? (
-        renderSummaryOnly()
-      ) : (
-        props.showSurvey !== false && (
-          <Survey.Survey model={surveyModel} onComplete={onComplete} />
-        )
-      )}
-      
-      {surveyData && !props.onlyShowSummary && (
-        <div>
-          <h2>Survey Summary</h2>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '10px', paddingTop: '10px' }}>
-            <button 
-              onClick={() => generatePDF(surveyData)} 
-              style={{ 
-                padding: '10px 20px', 
-                backgroundColor: '#4CAF50', 
-                color: 'white', 
-                border: 'none', 
-                borderRadius: '4px', 
-                cursor: 'pointer',
-                fontSize: '16px'
-              }}
-            >
-              Download PDF Report
-            </button>
-            {props.showFinishButton && (
-              <button 
-                onClick={props.onFinish}
-                style={{
-                  padding: '10px 20px',
-                  backgroundColor: '#2196F3',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '16px'
-                }}
-              >
-                Finish
-              </button>
-            )}
-          </div>
-          <div className="summary-section">
-            <h3>Your Responses</h3>
-            <ul>
-              {getSurveySummary(surveyData).map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="charts-container" style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-            {surveyData.question5 && (
-              <div style={{ position: 'relative', height: '250px', width: '400px', margin: '10px' }}>
-                <h3>Sleep Data</h3>
-                <canvas ref={sleepChartRef} id="sleepChartCanvas" />
-              </div>
-            )}
-            {surveyData.question7 && surveyData.question8 && (
-              <div style={{ position: 'relative', height: '250px', width: '400px', margin: '10px' }}>
-                <h3>Exercise Types</h3>
-                <canvas ref={exerciseChartRef} id="exerciseChartCanvas" />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      <Survey.Survey model={surveyModel} onComplete={onComplete} />
     </div>
   );
 };

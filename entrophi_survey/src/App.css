@@ -1,10 +1,264 @@
-
-
 .App {
-  background-color: #fcf0e3;
+  background-color: white;
   min-height: 100vh;
   display: flex;
-  flex: 1;
-  font-size: calc(10px + 2vmin);
-  color: rgb(105, 23, 23);
+  flex-direction: column;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+}
+
+/* Make the survey title white */
+.sv_main .sv_title {
+  color: white !important;
+}
+
+.survey-container {
+  max-width: 1200px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Survey header styling */
+.sv_main .sv_header {
+  background-color: #003366;
+  color: white;
+  padding: 20px;
+  border-radius: 8px 8px 0 0;
+}
+
+.sv_main .sv_title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.sv_main .sv_description {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* Survey body styling */
+.sv_main .sv_body {
+  background-color: white;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.1);
+}
+
+.sv_main .sv_container {
+  padding: 20px;
+}
+
+/* Question styling */
+.sv_main .sv_q {
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  padding: 16px;
+  border-left: 4px solid #003366;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.sv_main .sv_q_title {
+  color: #003366;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Input styling */
+.sv_main .sv_q_text_root, 
+.sv_main .sv_q_dropdown_control,
+.sv_main input[type="text"],
+.sv_main input[type="number"],
+.sv_main input[type="date"] {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  transition: border-color 0.3s;
+}
+
+.sv_main input:focus, 
+.sv_main select:focus {
+  border-color: #003366;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.2);
+}
+
+/* Button styling */
+.sv_main .sv_nav {
+  padding: 16px;
+}
+
+.sv_main .sv_nav_btn {
+  background-color: #003366 !important; /* Navy Blue override */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.sv_main .sv_nav_btn:hover {
+  background-color: #00264d !important; /* Darker Navy Blue override */
+}
+
+/* Progress bar styling */
+.sv_main .sv_progress {
+  background-color: #e0e0e0 !important;
+  height: 8px;
+  border-radius: 4px;
+  border-bottom: 1px solid #003366 !important; /* Navy Blue line under the progress bar */
+}
+
+.sv_main .sv_progress_bar {
+  background-color: #003366 !important; /* Navy Blue override */
+  border-radius: 4px;
+}
+
+/* Rating styling */
+.sv_main .sv-rating {
+  color: #003366;
+}
+
+.sv_main .sv-rating__item--selected {
+  background-color: #003366;
+  color: white;
+}
+
+.sv_main .sv_q_rating_item_text {
+  color: #003366;
+}
+
+/* Star rating */
+.sv_main .sv_q_rating_item.active .sv_q_rating_item_text {
+  color: #003366 !important;
+}
+
+/* Checkbox and radio button styling */
+.sv_main .sv_q_checkbox_control_label, 
+.sv_main .sv_q_radiogroup_control_label {
+  display: flex;
+  align-items: center;
+}
+
+/* Tagbox styling */
+.sv_main .sv_q_tagbox__item {
+  background-color: #003366;
+  color: white;
+  border-radius: 16px;
+  padding: 4px 12px;
+}
+
+/* Summary section styling */
+.survey-summary {
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 1200px;
+  width: 90%;
+}
+
+.survey-summary h2 {
+  color: #003366;
+  font-size: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #003366;
+}
+
+.survey-summary h3 {
+  color: #003366;
+  font-size: 20px;
+  margin: 20px 0 10px;
+}
+
+.summary-section {
+  margin-top: 24px;
+}
+
+.summary-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.summary-section li {
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 16px;
+}
+
+/* Chart container styling */
+.charts-container {
+  margin-top: 30px;
+}
+
+.charts-container > div {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+
+/* Button styling */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button.download-btn {
+  background-color: #003366;
+  color: white;
+}
+
+button.download-btn:hover {
+  background-color: #00264d;
+}
+
+button.finish-btn {
+  background-color: #003366;
+  color: white;
+}
+
+button.finish-btn:hover {
+  background-color: #00264d;
+}
+
+/* Final thank you page */
+.thank-you-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 40px;
+}
+
+.thank-you-page h1 {
+  color: #003366;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.thank-you-page p {
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.thank-you-page button {
+  background-color: #003366;
+  color: white;
 }

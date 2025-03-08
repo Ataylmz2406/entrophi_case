@@ -1,7 +1,7 @@
 const json = {
   "title": "User İnformation",
   "description": "Please enter your information.",
-  "logo": "entrophico_logo.jpg",
+  "logo": "entrophico_logo.png",
   "logoWidth": 60,
   "logoHeight": 60,
   "pages": [

@@ -1,264 +1,135 @@
+/* Define color variables for easy adjustments */
+:root {
+  --primary-color: #003366;
+  --secondary-color: #0055a5;
+  --accent-color: #0077cc;
+  --background-color: #f4f7fc;
+  --card-background: #ffffff;
+  --text-color: #333333;
+  --input-border: #ccd6dd;
+}
+
+/* General App Styling */
 .App {
-  background-color: white;
+  background-color: var(--background-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: 'Roboto', sans-serif;
-  color: #333;
+  color: var(--text-color);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
-/* Make the survey title white */
-.sv_main .sv_title {
-  color: white !important;
-}
-
+/* Survey Container */
 .survey-container {
-  max-width: 1200px;
-  width: 90%;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 900px;
+  width: 100%;
+  margin: 20px auto;
+  padding: 30px;
+  background: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: 500px; /* Ensures a minimum height for single questions */
 }
 
-/* Survey header styling */
+/* Survey Header */
 .sv_main .sv_header {
-  background-color: #003366;
-  color: white;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  color: #fff !important; 
   padding: 20px;
-  border-radius: 8px 8px 0 0;
+  border-radius: 12px 12px 0 0;
+  font-size: 1.5em;
+  font-weight: 700;
 }
 
-.sv_main .sv_title {
-  font-size: 24px;
-  font-weight: 600;
+/* Progress Bar */
+.sv_main .sv_progress_bar {
+  background: linear-gradient(to right, var(--primary-color), var(--accent-color)) !important;
+  border-radius: 5px;
 }
 
-.sv_main .sv_description {
-  font-size: 16px;
-  opacity: 0.9;
-}
-
-/* Survey body styling */
-.sv_main .sv_body {
-  background-color: white;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.1);
-}
-
-.sv_main .sv_container {
-  padding: 20px;
-}
-
-/* Question styling */
+/* Question Box */
 .sv_main .sv_q {
-  background-color: white;
+  background: var(--card-background);
   border-radius: 8px;
   margin-bottom: 16px;
   padding: 16px;
-  border-left: 4px solid #003366;
+  border-left: 4px solid var(--primary-color);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-size: 1.1em;
 }
 
-.sv_main .sv_q_title {
-  color: #003366;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-/* Input styling */
-.sv_main .sv_q_text_root, 
-.sv_main .sv_q_dropdown_control,
+/* Input Fields */
 .sv_main input[type="text"],
 .sv_main input[type="number"],
-.sv_main input[type="date"] {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  padding: 10px;
-  width: 100%;
-  transition: border-color 0.3s;
-}
-
-.sv_main input:focus, 
-.sv_main select:focus {
-  border-color: #003366;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.2);
-}
-
-/* Button styling */
-.sv_main .sv_nav {
-  padding: 16px;
-}
-
-.sv_main .sv_nav_btn {
-  background-color: #003366 !important; /* Navy Blue override */
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s;
-}
-
-.sv_main .sv_nav_btn:hover {
-  background-color: #00264d !important; /* Darker Navy Blue override */
-}
-
-/* Progress bar styling */
-.sv_main .sv_progress {
-  background-color: #e0e0e0 !important;
-  height: 8px;
-  border-radius: 4px;
-  border-bottom: 1px solid #003366 !important; /* Navy Blue line under the progress bar */
-}
-
-.sv_main .sv_progress_bar {
-  background-color: #003366 !important; /* Navy Blue override */
-  border-radius: 4px;
-}
-
-/* Rating styling */
-.sv_main .sv-rating {
-  color: #003366;
-}
-
-.sv_main .sv-rating__item--selected {
-  background-color: #003366;
-  color: white;
-}
-
-.sv_main .sv_q_rating_item_text {
-  color: #003366;
-}
-
-/* Star rating */
-.sv_main .sv_q_rating_item.active .sv_q_rating_item_text {
-  color: #003366 !important;
-}
-
-/* Checkbox and radio button styling */
-.sv_main .sv_q_checkbox_control_label, 
-.sv_main .sv_q_radiogroup_control_label {
-  display: flex;
-  align-items: center;
-}
-
-/* Tagbox styling */
-.sv_main .sv_q_tagbox__item {
-  background-color: #003366;
-  color: white;
-  border-radius: 16px;
-  padding: 4px 12px;
-}
-
-/* Summary section styling */
-.survey-summary {
-  background-color: white;
+.sv_main input[type="date"],
+.sv_main .sv_q_dropdown_control {
+  border: 2px solid var(--input-border);
   border-radius: 8px;
-  padding: 24px;
+  padding: 12px;
+  font-size: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sv_main input:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 8px rgba(0, 85, 165, 0.3);
+}
+
+/* Buttons */
+.sv_main .sv_nav_btn,
+.download-btn,
+.finish-btn {
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, background 0.2s ease-in-out;
+}
+
+.sv_main .sv_nav_btn:hover,
+.download-btn:hover,
+.finish-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+}
+
+/* Summary Section */
+.survey-summary {
+  background: linear-gradient(to bottom, #f9f9f9, #eef2f3);
+  padding: 30px;
+  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 1200px;
-  width: 90%;
 }
 
 .survey-summary h2 {
-  color: #003366;
+  color: var(--primary-color);
   font-size: 24px;
-  margin-bottom: 20px;
+  border-bottom: 2px solid var(--primary-color);
   padding-bottom: 10px;
-  border-bottom: 2px solid #003366;
 }
 
-.survey-summary h3 {
-  color: #003366;
-  font-size: 20px;
-  margin: 20px 0 10px;
-}
-
-.summary-section {
-  margin-top: 24px;
-}
-
-.summary-section ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.summary-section li {
-  padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
-  font-size: 16px;
-}
-
-/* Chart container styling */
-.charts-container {
-  margin-top: 30px;
-}
-
+/* Chart Styling */
 .charts-container > div {
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
 }
 
-/* Button styling */
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  transition: background-color 0.3s, transform 0.2s;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .survey-container {
+    padding: 20px;
+    min-height: 400px;
+  }
 
-button:hover {
-  transform: translateY(-2px);
-}
-
-button.download-btn {
-  background-color: #003366;
-  color: white;
-}
-
-button.download-btn:hover {
-  background-color: #00264d;
-}
-
-button.finish-btn {
-  background-color: #003366;
-  color: white;
-}
-
-button.finish-btn:hover {
-  background-color: #00264d;
-}
-
-/* Final thank you page */
-.thank-you-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  text-align: center;
-  padding: 40px;
-}
-
-.thank-you-page h1 {
-  color: #003366;
-  font-size: 32px;
-  margin-bottom: 20px;
-}
-
-.thank-you-page p {
-  font-size: 18px;
-  margin-bottom: 24px;
-}
-
-.thank-you-page button {
-  background-color: #003366;
-  color: white;
+  .charts-container > div {
+    padding: 20px;
+  }
 }
